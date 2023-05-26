@@ -1,0 +1,52 @@
+version: "3.8"
+
+services:
+  nginx:
+    build:
+      context: docker/nginx
+      dockerfile: Dockerfile
+      args:
+        - HOST=${HOST}
+    depends_on:
+      - app
+    ports:
+      - 80:80
+      - 443:443
+    env_file:
+      - .env
+
+  app:
+    depends_on:
+      - database
+    env_file:
+      - .env
+    ports:
+      - 3000:3000
+    build:
+      context: .
+      dockerfile: docker/app/Dockerfile
+    volumes:
+      - .:/app
+      - bundle_data:/bundle
+    command: sh /scripts/command.sh
+    stdin_open: true
+    tty: true
+
+  database:
+    container_name: "facebook_database"
+    image: postgres:14.1
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: 123456
+    ports:
+      - 5432:5432
+    volumes:
+      - facebook_database:/var/lib/mysql
+
+volumes:
+  facebook_database:
+    driver: local
+  bundle_data:
