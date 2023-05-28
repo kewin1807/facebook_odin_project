@@ -32,6 +32,14 @@ gem 'redis', '~> 4.0'
 
 gem 'pg'
 
+# devise
+gem 'devise'
+# omniauth
+gem 'omniauth-facebook'
+
+# install csrf
+gem 'omniauth-rails_csrf_protection'
+
 # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
 # gem "kredis"
 
